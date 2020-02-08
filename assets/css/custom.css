@@ -19,9 +19,40 @@
 button{
     outline: none !important;
 }
-
+#main, #console {
+    transition: 0.5s;
+  }
+#footer{
+    position : fixed;
+    bottom : 0;
+    width : 100%;
+}
+#console{
+    
+    border-top: 1px inset var(--colorThree);
+}
 
 /**Custom classes**/
+.sidebar{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: var(--colorOne);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px; 
+}
+.sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: block;
+    transition: 0.3s;
+  }
+
 .scroll{
     overflow-y:scroll;
     overflow-x: hidden;
@@ -35,18 +66,6 @@ button{
     max-width: 100%;
     max-height: calc( 100vh - 2rem - 150px);
     display: block;
-}
-.footer{
-    height: 2rem;
-    background-color: white;
-    position: fixed;
-    bottom: 0;
-    /* 
-    left: 50%;
-    margin-left: -125px;
-    */
-    z-index: 1000;
-    width: 100vw;
 }
 .drag{
     -webkit-app-region: drag;
@@ -65,6 +84,7 @@ button{
 .nav-custom{
     background-color: var(--colorOne);
     color: var(--colorTwo);
+    z-index: 2;
 }
 .no-deco{
     list-style-type: none;  

@@ -1,8 +1,13 @@
+/**
+ * Author : Thophile
+ * Project : Deskapp
+ */
+
 const electron = require('electron')
 const { app, BrowserWindow } = electron
 const fs = require('fs')
 const path = require('path')
-const { shell } = require('electron')
+
 
 var config ;
 
@@ -14,7 +19,7 @@ app.on('ready', () => {
             if (err.code === 'ENOENT') {
 
                 //Setting default if the file does not exists
-                console.log('File not found , setting defaults');
+                log('File not found , setting defaults');
                 config = {
                     width : 800,
                     height : 600,

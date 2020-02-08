@@ -1,0 +1,22 @@
+<nav class="navbar nav-custom shadow drag">
+    <button class="navbar-toggler no-drag" type="button" onclick="toggleNav()">
+        <span class="brand colored">DeskApp</span>
+    </button>
+
+    <div class="win-action no-drag text-right">
+        <a id="minimize" class="colored p-2 action">
+            ~
+        </a>
+        <a id="maximize" class="colored p-2 action">
+            o
+        </a>
+        <a id="close" class="colored p-2 action">
+            x
+        </a>
+    </div>
+
+</nav>
+<div class="sidebar no-drag" id="sidebar">
+    <a href="javascript:void(0)" onclick="loadPage('home.html');toggleNav();">Home</a>
+    <a href="javascript:void(0)" onclick="loadPage('tasks.html');toggleNav();">Tasks</a>  
+</div>
