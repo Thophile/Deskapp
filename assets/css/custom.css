@@ -30,6 +30,7 @@ button{
 #console{
     
     border-top: 1px inset var(--colorThree);
+    padding-left: 2px;
 }
 
 /**Custom classes**/

@@ -34,12 +34,13 @@ $(document).ready(function () {
 //load a page in main
 function loadPage(filename) {
     $("#main").load(filename);
+    log(filename + " loaded")
 }
 
 
 function addAction() {
 
-    log("Activating buttons")
+    log("Activating buttons ...")
 
 
     document.getElementById('minimize').addEventListener('click', (e) => {
@@ -67,6 +68,7 @@ function addAction() {
         window.close();
     })
     log("Close : OK")
+    log("Application successfully started !")
 }
 
 function toggleNav() {
@@ -82,10 +84,10 @@ function toggleNav() {
         document.getElementById("console").style.marginLeft = "200px";
         navToggled = true
     }
-    log("Navbar Toggled")
+    log("Navbar Toggled !")
 }
 
 function log(content) {
     date = new Date()
-    document.getElementById("console").innerHTML = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "  " + content;
+    document.getElementById("console").innerHTML = " <i class=\"fas fa-caret-right\"></i> " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "  " + content;
 }
