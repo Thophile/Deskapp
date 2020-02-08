@@ -1,0 +1,35 @@
+<form class="w-100" action="javascript:void(0);" id="form_new">
+    <div class="form-row">
+        <div class="col-7 col-md-7">
+            <input type="text" id="_name" class="form-control mt-2" placeholder="Name">
+        </div>
+        <div class="col-5 col-md-2">
+            <input type="number" id="_lastSeen" class="form-control mt-2" placeholder="Episode">
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="input-group mt-2">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="_day">Reminder</label>
+                </div>
+                <select class="custom-select" id="_day">
+                    <option value="none" title="">None</option>
+                    <option value="Monday" title="">Monday</option>
+                    <option value="Tuesday" title="">Tuesday</option>
+                    <option value="Wednesday" title="">Wednesday</option>
+                    <option value="Thursday" title="">Thursday</option>
+                    <option value="Friday" title="">Friday</option>
+                    <option value="Saturday" title="">Saturday</option>
+                    <option value="Sunday" title="">Sunday</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-10">
+            <input type="text" id="_watchLink" class="form-control mt-2" placeholder="Link to watch it">
+        </div>
+        <div class="col-2">
+            <button type="submit" class="btn btn-block btn-dark colored mt-2" onClick="addElement()">
+                Save
+            </button>
+        </div>
+    </div>
+</form>

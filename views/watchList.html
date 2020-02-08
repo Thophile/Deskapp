@@ -1,0 +1,30 @@
+<script>
+  //First load list
+  $(document).ready(
+    loadWatchList()
+  ); 
+</script>
+<h1 class="title m-3">
+  My WatchList
+</h1>
+<div class="container-fluid" style="overflow: hidden;">
+  <!-- Form button -->
+  <div class="row m-2" id="form_row">
+
+    <button id="form_dispend" class="btn btn-block btn-dark colored mt-2" onClick="formDispend()">Create new
+      entry</button>
+
+  </div>
+  <!-- Table list -->
+  <div class="scroll">
+    <table class="table table-sm" style="width: 100%;">
+      <thead class="">
+        <th>Name</th>
+        <th>Episode</th>
+        <th></th>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
+  </div>
+</div>
