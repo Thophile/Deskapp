@@ -9,10 +9,14 @@ const fs = require('fs')
 const path = require('path')
 
 
-var config ;
+
 
 app.on('ready', () => {
+    global.Start()
+})
 
+var config;
+global.Start = function(){
     //Read config file
     fs.readFile(path.resolve(__dirname, './config.json'), (err, data) => {
         if (err){
@@ -23,7 +27,7 @@ app.on('ready', () => {
                 config = {
                     width : 800,
                     height : 600,
-                    DevTools : false
+                    devTools : false
                 }
                 
                 
@@ -54,6 +58,7 @@ app.on('ready', () => {
         })
         win.loadURL(`file://${__dirname}/views/index.html`)
 
-        if(config.DevTools) win.webContents.openDevTools();
+        if(config.devTools) win.webContents.openDevTools();
     })
-})
+}
+

@@ -291,3 +291,37 @@ function minusEpisode(index) {
 
 /** Tasks **/
 
+
+/** Settings **/
+
+//Reload the window
+var config
+
+function refresh() {
+    fs.writeFile(path.resolve(__dirname, '../config.json'), JSON.stringify(config), function (err) {
+        if (err) throw err;
+        remote.getGlobal("Start")()
+        
+        remote.getCurrentWindow().close();
+        
+    });
+
+}
+function loadConfig() {
+    fs.readFile(path.resolve(__dirname, '../config.json'), (err, data) => {
+        if (err) throw err;
+        //Saving config object with the configuration
+        config = JSON.parse(data);
+        document.getElementById('_devTools').checked = config.devTools
+        document.getElementById('_width').setAttribute('value', config.width)
+        document.getElementById('_height').setAttribute('value', config.height)
+    })
+
+}
+
+function saveConfig() {
+    config.devTools = document.getElementById('_devTools').checked
+    config.width = document.getElementById('_width').value
+    config.height = document.getElementById('_height').value
+
+}

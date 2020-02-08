@@ -1,14 +1,40 @@
+<script>
+    //First load config
+  $(document).ready(
+    loadConfig()
+  ); 
+</script>
 <h1 class="title m-3">
-    My WatchList
-  </h1>
-  <div class="container-fluid" style="overflow: hidden;">
+    Settings
+</h1>
+<div class="container-fluid" style="overflow: hidden;">
     <!-- Form button -->
+    <form id="settings" class="w-100" action="javascript:void(0);"></form>
     <div class="row m-2" id="form_row">
-  
-      <!-- form for dicrete value ,
-     button set for preset and dev option , toggle for toogle-->
-  
+        <button class="btn btn-block btn-dark colored my-2" onclick="refresh();">Apply Changes</button>
+
+        <div class="col-6">
+            Developper Mode
+        </div>
+        <div class="col-6 text-center">
+            <label class="switch">
+                <input type="checkbox" class="form-control" id="_devTools" onchange="saveConfig()">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="col-6">
+            Width :
+        </div>
+        <div class="col-6">
+            <input type="number" id="_width" onchange="saveConfig()"></input>
+        </div>
+        <div class="col-6">
+            height
+        </div>
+        <div class="col-6">
+            <input type="number" id="_height" onchange="saveConfig()"></input>
+        </div>
     </div>
-    
-    
-  </div>
+    </form>
+
+</div>
