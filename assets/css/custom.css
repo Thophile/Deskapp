@@ -1,0 +1,134 @@
+/**
+*Custom css sheet,
+*Author : Thophile
+*For : TooDoom project
+*/
+
+/** Colors **/
+*{
+--colorOne : #2e2e3a;
+--colorTwo : #f34213;
+--colorThree : #696773;
+--colorFour : #761DDD;
+}
+
+/**Overide**/
+.navbar-brand, .nav-link{
+    outline: none !important;
+}
+button{
+    outline: none !important;
+}
+
+
+/**Custom classes**/
+.scroll{
+    overflow-y:scroll;
+    overflow-x: hidden;
+    max-width: 100%;
+    max-height: calc( 100vh - 2rem - 175px );
+    display: block;
+}
+.scroll-finder {
+    overflow-y:scroll;
+    overflow-x: hidden;
+    max-width: 100%;
+    max-height: calc( 100vh - 2rem - 150px);
+    display: block;
+}
+.footer{
+    height: 2rem;
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    /* 
+    left: 50%;
+    margin-left: -125px;
+    */
+    z-index: 1000;
+    width: 100vw;
+}
+.drag{
+    -webkit-app-region: drag;
+}
+.no-drag{
+    -webkit-app-region: no-drag;
+}
+
+.colored{
+    color: var(--colorTwo);
+}
+.remind{
+    color: var(--colorTwo);
+    background-color: var(--colorOne);
+}
+.nav-custom{
+    background-color: var(--colorOne);
+    color: var(--colorTwo);
+}
+.no-deco{
+    list-style-type: none;  
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+.title{
+    border-bottom:2px solid;
+    border-color: var(--colorTwo);
+}
+.meta{
+    color: var(--colorThree);
+}
+.img-full{
+    max-width: 100%;
+    height: auto;
+}
+.sidebar-header{
+    font-size: 1.3rem;
+}
+.action{
+  cursor: pointer;
+}
+.i-50{
+    height: auto;
+    max-width: 10%;
+}
+
+
+
+/**States**/
+a:visited, a:link{
+    color: var(--colorTwo);
+}
+a:hover{
+    text-decoration: none;
+    color: var(--colorFour);
+}
+a.twitter:hover{
+    color:#1da1f2;
+    }
+a.instagram:hover{
+    color:#e1306c;
+}
+a.linkedin:hover{
+    color:#0077B5;
+}
+a:active{
+    color: var(--colorThree);
+}
+
+
+.brand:visited, .brand{
+    color: var(--colorTwo);
+}
+.brand:hover{
+    text-decoration: none;
+    color: var(--colorFour);
+}
+.brand:active{
+    color: var(--colorThree);
+}
+
+
+.action:hover {
+    cursor:pointer;
+   }
