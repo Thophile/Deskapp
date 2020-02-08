@@ -4,6 +4,7 @@
   "description": "A simple usefull and modular desktop application to help you with your daily tasks",
   "main": "index.js",
   "scripts": {
+    "start": "electron index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Thophile",
