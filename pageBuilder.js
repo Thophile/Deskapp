@@ -57,11 +57,11 @@ function addAction() {
     log("Maximize : OK")
 
     document.getElementById('close').addEventListener('click', (e) => {
-        
         e.preventDefault()
         var window = remote.getCurrentWindow();
-        saveData(); 
         window.close();
+
+
     })
     log("Close : OK")
     log("Application successfully started !")
@@ -104,10 +104,10 @@ function getDayName(locale) {
 var data;
 
 function saveData() {
-    if(data === undefined){
+    if (data === undefined) {
         data = {
-            watchList : [],
-            tasks : []
+            watchList: [],
+            tasks: []
         }
     }
     fs.writeFile(path.resolve(__dirname, '../data.json'), JSON.stringify(data), function (err) {
@@ -128,6 +128,7 @@ function loadData() {
         } else {
             //Saving data object with the configuration
             data = JSON.parse(raw_data);
+            console.log("data successfully readed")
         }
     })
 }
@@ -147,92 +148,92 @@ function buttonDispend() {
 
 //Display the watchlist
 function loadWatchList() {
-    if(data.watchList !== []){
+    if (data.watchList !== []) {
 
         //Creating table
-    var tbody = document.getElementById('tbody')
-    tbody.innerHTML = ""
-    tbody.className = ''
-    for (let i = 0; i < data.watchList.length; i++) {
+        var tbody = document.getElementById('tbody')
+        tbody.innerHTML = ""
+        tbody.className = ''
+        for (let i = 0; i < data.watchList.length; i++) {
 
-        //Reminder
-        if (data.watchList[i].day != getDayName('en-GB')) {
-            data.watchList[i].remindMe = true
+            //Reminder
+            if (data.watchList[i].day != getDayName('en-GB')) {
+                data.watchList[i].remindMe = true
+            }
+
+            var row = document.createElement('tr')
+            var td = document.createElement('td')
+            td.innerHTML = data.watchList[i].name
+            td.className = 'truncate w-75 align-middle'
+            row.appendChild(td)
+
+            var td = document.createElement('td')
+            td.innerHTML = data.watchList[i].lastSeen
+            td.className = 'text-center align-middle'
+            row.appendChild(td)
+
+
+            var td = document.createElement('td')
+            td.className = 'btn-group'
+            //Action button
+            var button = document.createElement('button')
+            button.className = 'btn btn-dark colored'
+            button.title = 'I\'ve seen one less !'
+            button.addEventListener('click', () => {
+                minusEpisode(i)
+            })
+            button.innerHTML = '<i class="fas fa-minus-square"></i>'
+            td.appendChild(button)
+
+            var button = document.createElement('button')
+            button.className = 'btn btn-dark colored'
+            button.title = 'I\'ve seen one more !'
+            button.addEventListener('click', () => {
+                plusEpisode(i)
+            })
+            button.innerHTML = '<i class="fas fa-plus-square"></i>'
+            td.appendChild(button)
+
+            var button = document.createElement('button')
+            button.className = 'btn btn-dark colored'
+            button.title = 'Follow link'
+            button.addEventListener('click', () => {
+                shell.openExternal(data.watchList[i].watchLink)
+                data.watchList[i].remindMe = false
+            })
+            button.innerHTML = '<i class="fas fa-external-link-alt"></i>'
+            td.appendChild(button)
+
+            var button = document.createElement('button')
+            button.className = 'btn btn-dark colored'
+            button.title = 'Edit'
+            button.addEventListener('click', () => {
+                editElement(i)
+            })
+            button.innerHTML = '<i class="fas fa-edit"></i>'
+            td.appendChild(button)
+
+            var button = document.createElement('button')
+            button.className = 'btn btn-dark colored'
+            button.title = 'Remove'
+            button.addEventListener('click', () => {
+                removeElement(i)
+            })
+            button.innerHTML = '<i class="fas fa-trash"></i>'
+            td.appendChild(button)
+
+            row.appendChild(td)
+            if (data.watchList[i].remindMe == true && data.watchList[i].day == getDayName('en-GB')) {
+                row.className = 'remind'
+
+            } else {
+                row.className = ''
+            }
+
+            tbody.appendChild(row)
         }
-
-        var row = document.createElement('tr')
-        var td = document.createElement('td')
-        td.innerHTML = data.watchList[i].name
-        td.className = 'truncate w-75 align-middle'
-        row.appendChild(td)
-
-        var td = document.createElement('td')
-        td.innerHTML = data.watchList[i].lastSeen
-        td.className = 'text-center align-middle'
-        row.appendChild(td)
-
-
-        var td = document.createElement('td')
-        td.className = 'btn-group'
-        //Action button
-        var button = document.createElement('button')
-        button.className = 'btn btn-dark colored'
-        button.title = 'I\'ve seen one less !'
-        button.addEventListener('click', () => {
-            minusEpisode(i)
-        })
-        button.innerHTML = '<i class="fas fa-minus-square"></i>'
-        td.appendChild(button)
-
-        var button = document.createElement('button')
-        button.className = 'btn btn-dark colored'
-        button.title = 'I\'ve seen one more !'
-        button.addEventListener('click', () => {
-            plusEpisode(i)
-        })
-        button.innerHTML = '<i class="fas fa-plus-square"></i>'
-        td.appendChild(button)
-
-        var button = document.createElement('button')
-        button.className = 'btn btn-dark colored'
-        button.title = 'Follow link'
-        button.addEventListener('click', () => {
-            shell.openExternal(data.watchList[i].watchLink)
-            data.watchList[i].remindMe = false
-        })
-        button.innerHTML = '<i class="fas fa-external-link-alt"></i>'
-        td.appendChild(button)
-
-        var button = document.createElement('button')
-        button.className = 'btn btn-dark colored'
-        button.title = 'Edit'
-        button.addEventListener('click', () => {
-            editElement(i)
-        })
-        button.innerHTML = '<i class="fas fa-edit"></i>'
-        td.appendChild(button)
-
-        var button = document.createElement('button')
-        button.className = 'btn btn-dark colored'
-        button.title = 'Remove'
-        button.addEventListener('click', () => {
-            removeElement(i)
-        })
-        button.innerHTML = '<i class="fas fa-trash"></i>'
-        td.appendChild(button)
-
-        row.appendChild(td)
-        if (data.watchList[i].remindMe == true && data.watchList[i].day == getDayName('en-GB')) {
-            row.className = 'remind'
-
-        } else {
-            row.className = ''
-        }
-
-        tbody.appendChild(row)
     }
-
-    }
+    saveData()
 }
 
 //Remove and refresh the watchList
@@ -271,7 +272,7 @@ function editElement(index) {
         }
         removeElement(index)
     })
-
+    saveData()
 }
 
 
