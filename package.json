@@ -1,0 +1,14 @@
+{
+  "name": "deskapp",
+  "version": "1.0.0",
+  "description": "A simple usefull and modular desktop application to help you with your daily tasks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thophile",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^8.0.0"
+  }
+}
