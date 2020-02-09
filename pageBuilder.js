@@ -14,15 +14,17 @@ require('bootstrap');
 
 //On Start
 $(document).ready(function () {
-    //Load navbar
-    $("#header").load("_navbar.html", () => {
-        addAction()
-    });
-    //Load home
-    $('#main').load("home.html")
-
     //Load json local data
-    loadData()
+    loadData(function () {
+        //Load navbar
+        $("#header").load("_navbar.html", () => {
+            addAction()
+        });
+        //Load home
+        $('#main').load("home.html")
+
+    })
+    console.log(data)
 });
 
 
@@ -30,8 +32,8 @@ $(document).ready(function () {
 function loadPage(filename) {
     $("#main").load(filename);
     log(filename + " loaded")
-    saveData()
-    loadData()
+    saveData(loadData())
+
 }
 
 //Window Action Init
@@ -103,20 +105,22 @@ function getDayName(locale) {
 
 var data;
 
-function saveData() {
+function saveData(callback) {
     if (data === undefined) {
         data = {
             watchList: [],
-            tasks: []
+            tasks: [],
+            widgets: []
         }
     }
     fs.writeFile(path.resolve(__dirname, '../data.json'), JSON.stringify(data), function (err) {
         if (err) throw err
+        if (typeof callback === 'function' && callback()) callback();
+
     });
-    console.log(data)
 }
 
-function loadData() {
+function loadData(callback) {
     fs.readFile(path.resolve(__dirname, '../data.json'), (err, raw_data) => {
         if (err) {
             if (err.code === 'ENOENT') {
@@ -128,21 +132,98 @@ function loadData() {
         } else {
             //Saving data object with the configuration
             data = JSON.parse(raw_data);
-            console.log("data successfully readed")
+            log("Data successfully read")
         }
+        if (typeof callback === 'function' && callback()) callback();
     })
 }
 
 
+/** Home **/
+
+//Execute external .exe from path
+function execute(executablePath) {
+
+    var child = require('child_process').execFile;
+
+    child(executablePath, function (err, data) {
+        if (err) {
+            log(err);
+            return;
+        }
+
+        log(data.toString());
+    });
+}
+
+//Load the widget stored in data
+function loadWidget() {
+    var deck = document.getElementById('widgetDeck')
+    deck.innerHTML = ""
+    if (data.widgets !== []) {
+        for (let i = 0; i < data.widgets.length; i++) {
+            var div = document.createElement('div')
+            div.className = 'widget'
+            var img = document.createElement('img')
+            img.alt = data.widgets[i].name
+            img.className = 'card-img-top'
+            img.src = data.widgets[i].src
+            img.addEventListener('click', () => {
+                execute(data.widgets[i].app)
+            })
+            div.appendChild(img)
+            var ic = document.createElement('div')
+            ic.className = "overlay"
+            ic.innerHTML = '<i class="fas fa-trash-alt">'
+            ic.addEventListener('click', () => {
+                removeWidget(i)
+            })
+            div.appendChild(ic)
+            deck.appendChild(div)
+
+        }
+    }
+    var div = document.createElement('div')
+    div.className = 'widget'
+    div.innerHTML = '<img class="card-img-top" src="../assets/add.png" alt="Add" onclick="displayHomeForm()">'
+    deck.appendChild(div)
+
+}
+
+//Display the form
+function displayHomeForm() {
+    $('#widgetDeck').load('./home_form.html')
+}
+
+//Add a new widget
+function addWidget() {
+    try {
+        //Full path acces only works because of electron
+        var widget = {
+            name: document.getElementById("_name").value,
+            src: document.getElementById("_src").files[0].path,
+            app: document.getElementById("_app").files[0].path
+        }
+        data.widgets.splice(0, 0, widget)
+        loadWidget()
+    } catch (error) {
+        log(error)
+    }
+}
+function removeWidget(index) {
+    data.widgets.splice(index, 1)
+    loadWidget()
+}
+
 /** Watchlist **/
 
-//Dispend the form
-function formDispend() {
+//Display the form
+function displayWatchListForm() {
     $("#form_row").load('./watchList_form.html');
 }
 
-//Dispend the button
-function buttonDispend() {
+//Display the button
+function displayWatchListButton() {
     $("#form_row").load('./watchList_button_new.html');
 }
 
@@ -253,7 +334,7 @@ function addElement() {
         remindMe: true,
     }
     data.watchList.splice(0, 0, element)
-    buttonDispend()
+    displayWatchListButton()
     loadWatchList()
 }
 
@@ -301,9 +382,9 @@ function refresh() {
     fs.writeFile(path.resolve(__dirname, '../config.json'), JSON.stringify(config), function (err) {
         if (err) throw err;
         remote.getGlobal("Start")()
-        
+
         remote.getCurrentWindow().close();
-        
+
     });
 
 }
