@@ -36,11 +36,21 @@ button{
 }
 
 /**Custom classes**/
+.log_popup{
+    z-index : 10000;
+    position: fixed;
+    top: calc(50vh - 100px );
+    left: calc(50vw - 100px);
+    width: 200px;
+    height: 250px;
+    text-align: center;
+}
 .overlay{
-    z-index: 50;
+    z-index: 40;
     position:absolute;
     top:0;
     left:5px;
+    cursor: pointer;
 }
 .sidebar{
     height: 100%;
@@ -115,6 +125,7 @@ button{
     max-width: 10%;
 }
 .widget{
+    z-index: 25;
     max-width: 100px;
     position: relative;
 }

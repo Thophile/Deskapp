@@ -28,8 +28,26 @@
 
     </main>
     <footer id="footer" class="bg-lg">
+        <div id="log_form" class="log_popup shadow bg-lg" style="display: none;">
+            <div class="m-2">
+                <form id="account" class="" action="javascript:void(0);">
+                    <div class="overlay" onclick="toggleLog();">x</div>
+                    <h2 class="m-2">Account</h2>
+                    <input type="text" class="form-control mt-2" name="email" id="_email" placeholder="Email">
+                    <input type="password" class="form-control mt-2" name="password" id="_password" placeholder="Password">
+                    <div class="btn-group mt-2">
+                        <button class="btn btn-dark colored" onclick="logIn();toggleLog();">Log in</button>
+                        <button class="btn btn-dark colored" onclick="createAccount();toggleLog();">Create</button>
+                    </div>
+                </form>
+            </div>
+            <div id="log_error">
+            </div>
+        </div>
+       
+        </div>
         <div id="console">
-            
+
         </div>
     </footer>
 </body>
