@@ -23,10 +23,11 @@ global.Start = function(){
             if (err.code === 'ENOENT') {
 
                 //Setting default if the file does not exists
-                log('File not found , setting defaults');
+                console.log('File not found , setting defaults');
                 config = {
                     widgets : [],
-                    devTools : false
+                    devTools : false,
+                    jwt: ""
                 }
                 
                 

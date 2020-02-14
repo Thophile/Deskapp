@@ -152,8 +152,10 @@ function logIn(){
         log(res.message)
         config.jwt = res.jwt
         saveConfig()
+        loadData()
     })
     .catch(error=>{log(error)})
+
     
 }
 
