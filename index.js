@@ -10,6 +10,10 @@ const path = require('path')
 
 
 
+electron.app.setLoginItemSettings({
+    openAtLogin: arg.settings.startOnStartup,
+    path: electron.app.getPath("exe")
+});
 
 app.on('ready', () => {
     global.Start()
