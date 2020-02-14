@@ -11,11 +11,15 @@ const { remote } = require('electron')
 const $ = require('jquery');
 require('popper.js');
 require('bootstrap');
+const api_url = "http://localhost/api_deskapp/";
+var config = remote.getGlobal("config")
+var details;
 
 //On Start
 $(document).ready(function () {
-    //Load json local data
-    loadData(function () {
+
+    //Load json local config
+    loadConfig(function () {
         //Load navbar
         $("#header").load("_navbar.html", () => {
             addAction()
@@ -23,8 +27,10 @@ $(document).ready(function () {
         //Load home
         $('#main').load("home.html")
 
+        //query the api for distant data
+        loadData()
+
     })
-    console.log(data)
 });
 
 
@@ -102,40 +108,104 @@ function getDayName(locale) {
 
 //** Data Storage **/
 
+function createAccount(){
+    credentials = JSON.stringify(
+        {
+            email: document.getElementById('_mail').value,
+            password: document.getElementById('_password').value,
+            details: details
+        }
+    )
+    //making the api query
+    var params = {
+        headers: {
+            "content-type":"application/json; charset=UTF-8"
+        },
+        body: credentials,
+        method: "POST" 
+    }
 
-var data;
+    fetch(api_url + "create_user.php", params)
+    .then(data=>{return data.json()})
+    .then(res=>{console.log("res="+res)})
+    .catch(error=>{log(error)})
+}
+
+function logIn(){
+    credentials = JSON.stringify({
+        email : document.getElementById('_email').value,
+        password: document.getElementById('_password').value
+    })
+
+    //making the api query
+    var params = {
+        headers: {
+            "content-type":"application/json"
+        },
+        body: credentials,
+        method: "POST" 
+    }
+
+    fetch(api_url + "login.php", params)
+    .then(data=>{return data.json()})
+    .then(res=>{
+        log(res.message)
+        config.jwt = res.jwt
+        saveConfig()
+    })
+    .catch(error=>{log(error)})
+    
+}
 
 function saveData(callback) {
-    if (data === undefined) {
-        data = {
-            watchList: [],
-            tasks: [],
-            widgets: []
-        }
-    }
-    fs.writeFile(path.resolve(__dirname, '../data.json'), JSON.stringify(data), function (err) {
-        if (err) throw err
-        if (typeof callback === 'function' && callback()) callback();
 
-    });
+    credentials = JSON.stringify({
+        details: details,
+        jwt: config.jwt
+    })
+    //making the api query
+    var params = {
+        headers: {
+            "content-type":"application/json; charset=UTF-8"
+        },
+        body: credentials,
+        method: "POST" 
+    }
+
+    fetch(api_url + "update_user.php", params)
+    .then(data=>{return data.json()})
+    .then(res=>{log(res.message)})
+    .catch(error=>{log(error)})
+
+    if (typeof callback === 'function' && callback()) callback();
 }
 
 function loadData(callback) {
-    fs.readFile(path.resolve(__dirname, '../data.json'), (err, raw_data) => {
-        if (err) {
-            if (err.code === 'ENOENT') {
-                saveData()
-            } else {
-                //throwing other error
-                throw err;
-            }
-        } else {
-            //Saving data object with the configuration
-            data = JSON.parse(raw_data);
-            log("Data successfully read")
-        }
-        if (typeof callback === 'function' && callback()) callback();
+
+    credentials = JSON.stringify({
+        jwt: config.jwt
     })
+
+    var params = {
+        headers: {
+            "content-type":"application/json; charset=UTF-8"
+        },
+        body: credentials,
+        method: "POST" 
+    }
+
+    fetch(api_url + "validate_token.php", params)
+    .then(data=>{return data.json()})
+    .then(res=>{
+        log(res.message)
+        details= res.data.details
+    })
+    .catch(error=>{log(error)})
+
+    
+    log("Data successfully read")
+    if (typeof callback === 'function' && callback()) callback();
+    
 }
 
 
@@ -156,20 +226,20 @@ function execute(executablePath) {
     });
 }
 
-//Load the widget stored in data
+//Load the widget stored in config
 function loadWidget() {
     var deck = document.getElementById('widgetDeck')
     deck.innerHTML = ""
-    if (data.widgets !== []) {
-        for (let i = 0; i < data.widgets.length; i++) {
+    if (config.widgets !== []) {
+        for (let i = 0; i < config.widgets.length; i++) {
             var div = document.createElement('div')
             div.className = 'widget'
             var img = document.createElement('img')
-            img.alt = data.widgets[i].name
+            img.alt = config.widgets[i].name
             img.className = 'card-img-top'
-            img.src = data.widgets[i].src
+            img.src = config.widgets[i].src
             img.addEventListener('click', () => {
-                execute(data.widgets[i].app)
+                execute(config.widgets[i].app)
             })
             div.appendChild(img)
             var ic = document.createElement('div')
@@ -187,7 +257,7 @@ function loadWidget() {
     div.className = 'widget'
     div.innerHTML = '<img class="card-img-top" src="../assets/add.png" alt="Add" onclick="displayHomeForm()">'
     deck.appendChild(div)
-
+    saveConfig()
 }
 
 //Display the form
@@ -204,14 +274,14 @@ function addWidget() {
             src: document.getElementById("_src").files[0].path,
             app: document.getElementById("_app").files[0].path
         }
-        data.widgets.splice(0, 0, widget)
+        config.widgets.splice(0, 0, widget)
         loadWidget()
     } catch (error) {
         log(error)
     }
 }
 function removeWidget(index) {
-    data.widgets.splice(index, 1)
+    config.widgets.splice(index, 1)
     loadWidget()
 }
 
@@ -229,27 +299,27 @@ function displayWatchListButton() {
 
 //Display the watchlist
 function loadWatchList() {
-    if (data.watchList !== []) {
+    if (details.watchList !== []) {
 
         //Creating table
         var tbody = document.getElementById('tbody')
         tbody.innerHTML = ""
         tbody.className = ''
-        for (let i = 0; i < data.watchList.length; i++) {
+        for (let i = 0; i < details.watchList.length; i++) {
 
             //Reminder
-            if (data.watchList[i].day != getDayName('en-GB')) {
-                data.watchList[i].remindMe = true
+            if (details.watchList[i].day != getDayName('en-GB')) {
+                details.watchList[i].remindMe = true
             }
 
             var row = document.createElement('tr')
             var td = document.createElement('td')
-            td.innerHTML = data.watchList[i].name
+            td.innerHTML = details.watchList[i].name
             td.className = 'truncate w-75 align-middle'
             row.appendChild(td)
 
             var td = document.createElement('td')
-            td.innerHTML = data.watchList[i].lastSeen
+            td.innerHTML = details.watchList[i].lastSeen
             td.className = 'text-center align-middle'
             row.appendChild(td)
 
@@ -279,8 +349,8 @@ function loadWatchList() {
             button.className = 'btn btn-dark colored'
             button.title = 'Follow link'
             button.addEventListener('click', () => {
-                shell.openExternal(data.watchList[i].watchLink)
-                data.watchList[i].remindMe = false
+                shell.openExternal(details.watchList[i].watchLink)
+                details.watchList[i].remindMe = false
             })
             button.innerHTML = '<i class="fas fa-external-link-alt"></i>'
             td.appendChild(button)
@@ -304,7 +374,7 @@ function loadWatchList() {
             td.appendChild(button)
 
             row.appendChild(td)
-            if (data.watchList[i].remindMe == true && data.watchList[i].day == getDayName('en-GB')) {
+            if (details.watchList[i].remindMe == true && details.watchList[i].day == getDayName('en-GB')) {
                 row.className = 'remind'
 
             } else {
@@ -320,7 +390,7 @@ function loadWatchList() {
 //Remove and refresh the watchList
 function removeElement(index) {
 
-    data.watchList.splice(index, 1)
+    details.watchList.splice(index, 1)
     loadWatchList()
 }
 
@@ -333,7 +403,7 @@ function addElement() {
         day: document.getElementById('_day').value,
         remindMe: true,
     }
-    data.watchList.splice(0, 0, element)
+    details.watchList.splice(0, 0, element)
     displayWatchListButton()
     loadWatchList()
 }
@@ -341,7 +411,7 @@ function addElement() {
 //Load in the form for editing
 function editElement(index) {
     $("#form_row").load('./watchList_form.html', function () {
-        var element = data.watchList[index]
+        var element = details.watchList[index]
         document.getElementById('_name').setAttribute('value', element.name)
         document.getElementById('_lastSeen').setAttribute('value', element.lastSeen)
         document.getElementById('_watchLink').setAttribute('value', element.watchLink)
@@ -358,51 +428,156 @@ function editElement(index) {
 
 
 function plusEpisode(index) {
-    data.watchList[index].lastSeen++
-    data.watchList[index].remindMe = false
+    details.watchList[index].lastSeen++
+    details.watchList[index].remindMe = false
     loadWatchList()
 }
 
 function minusEpisode(index) {
-    data.watchList[index].lastSeen--
-    data.watchList[index].remindMe = false
+    details.watchList[index].lastSeen--
+    details.watchList[index].remindMe = false
     loadWatchList()
 }
 
 
 /** Tasks **/
 
+function loadTasks() {
+    var tbody = document.getElementById('tasks')
+    tbody.innerHTML = ''
+    for (let index = 0; index < details.tasks.length; index++) {
+        var tr = document.createElement('tr')
+
+        var td = document.createElement('td')
+        td.className = 'truncate w-100 align-middle'
+        td.innerHTML = details.tasks[index].name
+        tr.appendChild(td)
+        var td = document.createElement('td')
+        td.className = 'btn-group'
+
+        var button = document.createElement('button')
+        button.className = 'btn btn-dark colored'
+        button.innerHTML = '<i class="far fa-sticky-note"></i>'
+        button.addEventListener('click', () => {
+            addNote(index)
+        })
+        td.appendChild(button)
+
+        var button = document.createElement('button')
+        button.className = 'btn btn-dark colored'
+        button.innerHTML = '<i class="fas fa-edit"></i>'
+        button.addEventListener('click', () => {
+            editTask(index)
+        })
+        td.appendChild(button)
+
+        var button = document.createElement('button')
+        button.className = 'btn btn-dark colored'
+        button.innerHTML = '<i class="fas fa-sort-up"></i>'
+        button.addEventListener('click', () => {
+            sortUp(index)
+        })
+        td.appendChild(button)
+
+        var button = document.createElement('button')
+        button.className = 'btn btn-dark colored'
+        button.innerHTML = '<i class="fas fa-sort-down"></i>'
+        button.addEventListener('click', () => {
+            sortDown(index)
+        })
+        td.appendChild(button)
+
+        var button = document.createElement('button')
+        button.className = 'btn btn-dark colored'
+        button.innerHTML = '<i class="fas fa-check-square"></i>'
+        button.addEventListener('click', () => {
+            removeTask(index)
+        })
+        td.appendChild(button)
+
+        tr.appendChild(td)
+        tbody.appendChild(tr)
+    }
+    saveData()
+}
+
+function addTask() {
+    var task = {
+        name: document.getElementById('_name').value
+    }
+    details.tasks.splice(0, 0, task)
+    loadTasks()
+    $('#form_row').load('./tasks_form.html')
+    log("New task added")
+}
+
+function removeTask(index) {
+    details.tasks.splice(index, 1)
+    loadTasks()
+}
+
+function editTask(index) {
+    $('#form_row').load('./tasks_form.html', () => {
+        var task = details.tasks[index]
+        document.getElementById('_name').setAttribute('value', task.name)
+        removeTask(index)
+        log("Editing \"" + task.name + "\"")
+    })
+}
+
+function sortUp(index) {
+    if (index > 0) {
+        var task = details.tasks[index]
+        removeTask(index)
+        details.tasks.splice(index - 1, 0, task)
+        loadTasks()
+    }
+}
+
+function sortDown(index) {
+    if (index < details.tasks.length) {
+        var task = details.tasks[index]
+        removeTask(index)
+        details.tasks.splice(index + 1, 0, task)
+        loadTasks()
+    }
+}
 
 /** Settings **/
 
+
+var config = remote.getGlobal("config")
+
 //Reload the window
-var config
-
 function refresh() {
-    fs.writeFile(path.resolve(__dirname, '../config.json'), JSON.stringify(config), function (err) {
-        if (err) throw err;
-        remote.getGlobal("Start")()
 
-        remote.getCurrentWindow().close();
-
-    });
-
+    remote.getGlobal("Start")()
+    remote.getCurrentWindow().close();
 }
-function loadConfig() {
+
+function loadConfig(callback) {
     fs.readFile(path.resolve(__dirname, '../config.json'), (err, data) => {
         if (err) throw err;
         //Saving config object with the configuration
         config = JSON.parse(data);
-        document.getElementById('_devTools').checked = config.devTools
-        document.getElementById('_width').setAttribute('value', config.width)
-        document.getElementById('_height').setAttribute('value', config.height)
+        if (typeof callback === 'function' && callback()) callback();
+
     })
 
 }
 
 function saveConfig() {
-    config.devTools = document.getElementById('_devTools').checked
-    config.width = document.getElementById('_width').value
-    config.height = document.getElementById('_height').value
 
+    fs.writeFile(path.resolve(__dirname, '../config.json'), JSON.stringify(config), function (err) {
+        if (err) throw err;
+    });
 }
+
+function updateConfig(){
+    config.devTools = document.getElementById('_devTools').checked
+}
+function displayConfig(){
+    document.getElementById('_devTools').checked = config.devTools
+}
+
+

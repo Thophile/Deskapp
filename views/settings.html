@@ -1,7 +1,7 @@
 <script>
     //First load config
   $(document).ready(
-    loadConfig()
+    displayConfig()
   ); 
 </script>
 <h1 class="title m-3">
@@ -9,7 +9,7 @@
 </h1>
 <div class="container-fluid" style="overflow: hidden;">
     <!-- Form button -->
-    <form id="settings" class="w-100" action="javascript:void(0);"></form>
+    <form id="settings" class="w-100" action="javascript:void(0);">
     <div class="row m-2" id="form_row">
         <button class="btn btn-block btn-dark colored my-2" onclick="refresh();">Apply Changes</button>
 
@@ -18,23 +18,27 @@
         </div>
         <div class="col-6 text-center">
             <label class="switch">
-                <input type="checkbox" class="form-control" id="_devTools" onchange="saveConfig()">
+                <input type="checkbox" class="form-control" id="_devTools" onchange="updateConfig()">
                 <span class="slider round"></span>
             </label>
         </div>
-        <div class="col-6">
-            Width :
+    </div>
+    <form id="account" class="w-100" action="javascript:void(0);">
+    <div class="row m-2 align-middle">
+        <div class="col-2">
+            Account
         </div>
-        <div class="col-6">
-            <input type="number" id="_width" onchange="saveConfig()"></input>
+        <div class="col-4">
+            <input type="text" class="form-control" name="email" id="_email">
         </div>
-        <div class="col-6">
-            height
+        <div class="col-4">
+            <input type="password" class="form-control" name="password" id="_password">
         </div>
-        <div class="col-6">
-            <input type="number" id="_height" onchange="saveConfig()"></input>
+        <div class="col-2">
+            <button class="btn btn-block btn-dark colored" onclick="logIn();">Save</button>
         </div>
     </div>
+
     </form>
 
 </div>

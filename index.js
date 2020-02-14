@@ -15,7 +15,7 @@ app.on('ready', () => {
     global.Start()
 })
 
-var config;
+global.config;
 global.Start = function(){
     //Read config file
     fs.readFile(path.resolve(__dirname, './config.json'), (err, data) => {
@@ -25,8 +25,7 @@ global.Start = function(){
                 //Setting default if the file does not exists
                 log('File not found , setting defaults');
                 config = {
-                    width : 800,
-                    height : 600,
+                    widgets : [],
                     devTools : false
                 }
                 
@@ -54,10 +53,11 @@ global.Start = function(){
             icon: __dirname + '/assets/icons/png/icon_512x512.png',
             webPreferences: {
                 nodeIntegration: true
-            }
+            },
         })
+        win.maximize()
         win.loadURL(`file://${__dirname}/views/index.html`)
-
+        app.allowRendererProcessReuse = true;
         if(config.devTools) win.webContents.openDevTools();
     })
 }
