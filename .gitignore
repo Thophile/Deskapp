@@ -2,3 +2,4 @@ node_modules/
 release-builds/
 config.json
 DeskApp-win32-x64/
+windows_installer/

@@ -11,7 +11,7 @@ const { remote } = require('electron')
 const $ = require('jquery');
 require('popper.js');
 require('bootstrap');
-const api_url = "http://localhost/api_deskapp/";
+const api_url = "http://deskapp-api.rf.gd/api_deskapp/";
 var config = remote.getGlobal("config")
 var navToggled = false;
 var logToggled = false;

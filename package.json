@@ -15,6 +15,7 @@
     "popper.js": "^1.16.1"
   },
   "devDependencies": {
-    "electron": "^8.0.0"
+    "electron": "^8.0.0",
+    "electron-wix-msi": "^2.2.0"
   }
 }
