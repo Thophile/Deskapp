@@ -13,7 +13,10 @@ require('popper.js');
 require('bootstrap');
 const api_url = "http://localhost/api_deskapp/";
 var config = remote.getGlobal("config")
+var navToggled = false;
+var logToggled = false;
 var details;
+var email;
 
 //On Start
 $(document).ready(function () {
@@ -27,9 +30,10 @@ $(document).ready(function () {
         //Load home
         $('#main').load("home.html")
 
+
         //query the api for distant data
         loadData()
-
+        console.log(details)
     })
 });
 
@@ -38,6 +42,7 @@ $(document).ready(function () {
 function loadPage(filename) {
     $("#main").load(filename);
     log(filename + " loaded")
+    loadConfig()
     saveData(loadData())
 
 }
@@ -76,7 +81,7 @@ function addAction() {
 }
 
 //Toogle the side navbar
-var navToggled = false;
+
 
 function toggleNav() {
     if (navToggled) {
@@ -93,6 +98,16 @@ function toggleNav() {
     }
     log("Navbar Toggled !")
 }
+function toggleLog(){
+    if(logToggled){
+        document.getElementById('log_form').style.display="none"
+        logToggled=false
+    }else{
+        document.getElementById('log_form').style.display="block"
+        logToggled=true
+    }
+    
+}
 
 //Output message with date in a custom console
 function log(content) {
@@ -106,14 +121,19 @@ function getDayName(locale) {
 
 
 
+
 //** Data Storage **/
 
 function createAccount(){
+
     credentials = JSON.stringify(
         {
-            email: document.getElementById('_mail').value,
+            email: document.getElementById('_email').value,
             password: document.getElementById('_password').value,
-            details: details
+            details: {
+                watchList : [],
+                tasks : []
+            }
         }
     )
     //making the api query
@@ -126,9 +146,24 @@ function createAccount(){
     }
 
     fetch(api_url + "create_user.php", params)
-    .then(data=>{return data.json()})
-    .then(res=>{console.log("res="+res)})
-    .catch(error=>{log(error)})
+    .then(data=>{
+        if(data.status == "400"){
+            toggleLog()
+        }
+        return data.json()
+        
+        
+    })
+    .then(res=>{
+            document.getElementById('log_error').innerHTML = res.message
+    })
+    .catch(error=>{console.log(error)})
+}
+
+function changeAccount(){
+    config.jwt= ""
+    saveConfig()
+    toggleLog()
 }
 
 function logIn(){
@@ -147,7 +182,12 @@ function logIn(){
     }
 
     fetch(api_url + "login.php", params)
-    .then(data=>{return data.json()})
+    .then(data=>{
+        if(data.status == "401"){
+            document.getElementById('log_error').innerHTML="Access denied"
+        }
+            return data.json()        
+    })
     .then(res=>{
         log(res.message)
         config.jwt = res.jwt
@@ -175,11 +215,18 @@ function saveData(callback) {
     }
 
     fetch(api_url + "update_user.php", params)
-    .then(data=>{return data.json()})
-    .then(res=>{log(res.message)})
-    .catch(error=>{log(error)})
+    .then(data=>{ 
+        return data.json()  
+    })
+    .then(res=>{
+        config.jwt = res.jwt
+        saveConfig()
+        if (typeof callback === 'function' && callback()) callback();
+        
+    })
+    .catch(error=>{console.log(error)})
 
-    if (typeof callback === 'function' && callback()) callback();
+    
 }
 
 function loadData(callback) {
@@ -197,16 +244,20 @@ function loadData(callback) {
     }
 
     fetch(api_url + "validate_token.php", params)
-    .then(data=>{return data.json()})
-    .then(res=>{
-        log(res.message)
-        details= res.data.details
+    .then(data=>{
+        if(data.status == "401"){
+            toggleLog()
+        }
+        return data.json()
     })
-    .catch(error=>{log(error)})
+    .then(res=>{
+        console.log(res)
+        details = res.data.details;
+        email = res.data.email;
+    })
+    .catch(error=>{console.log(error)})
 
-    
-    log("Data successfully read")
-    if (typeof callback === 'function' && callback()) callback();
+    if (typeof callback === 'function') callback();
     
 }
 
@@ -220,7 +271,7 @@ function execute(executablePath) {
 
     child(executablePath, function (err, data) {
         if (err) {
-            log(err);
+            console.log(err);
             return;
         }
 
@@ -232,7 +283,7 @@ function execute(executablePath) {
 function loadWidget() {
     var deck = document.getElementById('widgetDeck')
     deck.innerHTML = ""
-    if (config.widgets !== []) {
+    if (config.widgets !== undefined) {
         for (let i = 0; i < config.widgets.length; i++) {
             var div = document.createElement('div')
             div.className = 'widget'
@@ -279,9 +330,10 @@ function addWidget() {
         config.widgets.splice(0, 0, widget)
         loadWidget()
     } catch (error) {
-        log(error)
+        console.log(error)
     }
 }
+
 function removeWidget(index) {
     config.widgets.splice(index, 1)
     loadWidget()
@@ -547,9 +599,6 @@ function sortDown(index) {
 
 /** Settings **/
 
-
-var config = remote.getGlobal("config")
-
 //Reload the window
 function refresh() {
 
@@ -562,6 +611,7 @@ function loadConfig(callback) {
         if (err) throw err;
         //Saving config object with the configuration
         config = JSON.parse(data);
+        
         if (typeof callback === 'function' && callback()) callback();
 
     })
@@ -577,9 +627,15 @@ function saveConfig() {
 
 function updateConfig(){
     config.devTools = document.getElementById('_devTools').checked
+    saveConfig()
 }
+
 function displayConfig(){
     document.getElementById('_devTools').checked = config.devTools
+    if(config.jwt !== "") {
+        document.getElementById('_username').placeholder = email
+    }
+
 }
 
 
