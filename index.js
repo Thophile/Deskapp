@@ -15,7 +15,7 @@ const path = require('path')
 global.config = {
     widgets : [],
     devTools : false,
-    openAtLogin : true,
+    openAtLogin : false,
     jwt: ""
 }
 global.details={
