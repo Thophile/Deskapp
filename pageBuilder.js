@@ -247,7 +247,7 @@ function loadData(callback) {
     })
     .then(res=>{
         console.log(res)
-        details = res.data.details;
+        details = res.details;
         email = res.data.email;
     })
     .catch(error=>{console.log(error)})
