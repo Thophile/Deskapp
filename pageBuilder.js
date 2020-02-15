@@ -12,7 +12,7 @@ const $ = require('jquery');
 require('popper.js');
 require('bootstrap');
 
-const api_url = "http://deskapp-api.rf.gd/api_deskapp/";
+const api_url = "http://alexandresauner.fr:8080/api_deskapp/";
 var config = remote.getGlobal("config")
 var details = remote.getGlobal("details")
 var navToggled = false;
