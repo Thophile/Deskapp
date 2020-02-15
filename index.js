@@ -2,6 +2,11 @@
  * Author : Thophile
  * Project : Deskapp
  */
+/**
+ * Build command :
+ * electron-packager . --platform=win32 --arch=x64 --overwrite --icon=assets/icons/win/icon_512x512.ico DeskApp
+ * node build_installer.js
+*/
 
 const electron = require('electron')
 const { app, BrowserWindow } = electron
