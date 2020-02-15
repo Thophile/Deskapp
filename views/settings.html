@@ -1,0 +1,33 @@
+<script>
+    //First load config
+  $(document).ready(
+    displayConfig()
+  ); 
+</script>
+<h1 class="title m-3">
+    Settings
+</h1>
+<div class="container-fluid" style="overflow: hidden;">
+    <!-- Form button -->
+    <form id="settings" class="w-100" action="javascript:void(0);">
+    <div class="row m-2" id="form_row">
+        <button class="btn btn-block btn-dark colored my-2" onclick="refresh();">Apply Changes</button>
+
+        <div class="col-6">
+            Developper Mode
+        </div>
+        <div class="col-6 text-center">
+            <label class="switch">
+                <input type="checkbox" class="form-control" id="_devTools" onchange="updateConfig()">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="col-6">Account</div>
+        <div class="col-3">
+            <input class="form-control" type="text" readonly id="_username">
+        </div>
+        <div class="col-3">
+            <button class="btn btn-block btn-dark colored" onClick="changeAccount();">Change</button>
+        </div>
+    </div>
+</div>

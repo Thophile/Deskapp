@@ -4,11 +4,18 @@
   "description": "A simple usefull and modular desktop application to help you with your daily tasks",
   "main": "index.js",
   "scripts": {
+    "start": "electron index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Thophile",
   "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.1"
+  },
   "devDependencies": {
-    "electron": "^8.0.0"
+    "electron": "^8.0.0",
+    "electron-wix-msi": "^2.2.0"
   }
 }

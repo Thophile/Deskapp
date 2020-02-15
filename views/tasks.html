@@ -1,0 +1,23 @@
+<script>
+    //First load widget
+    $(document).ready( () =>{
+        loadTasks()
+        $('#form_row').load('./tasks_form.html')
+    } 
+    ); 
+</script>
+<h1 class="title m-3">
+    Tasks
+</h1>
+<div class="container-fluid" style="overflow: hidden;">
+    <div id="form_row">
+
+    </div>
+    <div class="scroll mt-2">
+        <table class="table table-sm" style="width:100%;">
+            <tbody id="tasks">
+
+            </tbody>
+        </table>
+    </div>
+</div>

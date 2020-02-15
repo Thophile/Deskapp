@@ -1,5 +1,5 @@
 node_modules/
 release-builds/
-appdata/watchList.json
-appdata/mymodules.json
-appdata/mymodules.json
+config.json
+DeskApp-win32-x64/
+windows_installer/
