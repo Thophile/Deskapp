@@ -7,39 +7,41 @@ const electron = require('electron')
 const { app, BrowserWindow } = electron
 const fs = require('fs')
 const path = require('path')
+global.config = {
+    widgets : [],
+    devTools : false,
+    openAtLogin : true,
+    jwt: ""
+}
+global.details={
+    watchList : [],
+    tasks : []
+}
 
 
-
-electron.app.setLoginItemSettings({
-    openAtLogin: arg.settings.startOnStartup,
-    path: electron.app.getPath("exe")
+app.setLoginItemSettings({
+    openAtLogin: config.openAtLogin,
+    path: app.getPath("exe")
 });
 
 app.on('ready', () => {
     global.Start()
 })
 
-global.config;
+app.on('window-all-closed', () => {
+    app.quit()
+  })
 global.Start = function(){
     //Read config file
-    fs.readFile(path.resolve(__dirname, './config.json'), (err, data) => {
+    fs.readFile(path.join(app.getPath('userData'), 'config.json'), (err, data) => {
         if (err){
             if (err.code === 'ENOENT') {
-
                 //Setting default if the file does not exists
                 console.log('File not found , setting defaults');
-                config = {
-                    widgets : [],
-                    devTools : false,
-                    jwt: ""
-                }
-                
-                
-                fs.writeFile(path.resolve(__dirname, './config.json'), JSON.stringify(config), function (err) {
+                fs.writeFile(path.join(app.getPath('userData'), 'config.json'), JSON.stringify(config), function (err) {
                     if (err) throw err;
                 });
             } else {
-    
                 //throwing other error
                 throw err;
             }
