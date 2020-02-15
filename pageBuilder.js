@@ -11,12 +11,12 @@ const { remote } = require('electron')
 const $ = require('jquery');
 require('popper.js');
 require('bootstrap');
-const api_url = "http://deskapp-api.rf.gd/api_deskapp/";
+
+const api_url = "http://alexandresauner.fr:8080/api_deskapp/";
 var config = remote.getGlobal("config")
+var details = remote.getGlobal("details")
 var navToggled = false;
 var logToggled = false;
-var details;
-var email;
 
 //On Start
 $(document).ready(function () {
@@ -36,7 +36,6 @@ $(document).ready(function () {
         console.log(details)
     })
 });
-
 
 //Load a page in the main section
 function loadPage(filename) {
@@ -80,9 +79,7 @@ function addAction() {
     log("Application successfully started !")
 }
 
-//Toogle the side navbar
-
-
+//Toogle the side navbar and log pop-up
 function toggleNav() {
     if (navToggled) {
         document.getElementById("sidebar").style.width = "0";
@@ -269,7 +266,7 @@ function refresh() {
 }
 
 function loadConfig(callback) {
-    fs.readFile(path.resolve(__dirname, '../config.json'), (err, data) => {
+    fs.readFile(path.join(remote.app.getPath('userData'), 'config.json'), (err, data) => {
         if (err) throw err;
         //Saving config object with the configuration
         config = JSON.parse(data);
@@ -282,20 +279,26 @@ function loadConfig(callback) {
 
 function saveConfig() {
 
-    fs.writeFile(path.resolve(__dirname, '../config.json'), JSON.stringify(config), function (err) {
+    fs.writeFile(path.join(remote.app.getPath('userData'), 'config.json'), JSON.stringify(config), function (err) {
         if (err) throw err;
     });
 }
 
 function updateConfig(){
     config.devTools = document.getElementById('_devTools').checked
+    config.openAtLogin = document.getElementById('_openAtLogin').checked
     saveConfig()
 }
 
 function displayConfig(){
+    //toggle settings
     document.getElementById('_devTools').checked = config.devTools
+    document.getElementById('_openAtLogin').checked = config.openAtLogin
+
     if(config.jwt !== "") {
-        document.getElementById('_username').placeholder = email
+        document.getElementById('_username').placeholder = config.email
+    }else{
+        document.getElementById('_username').placeholder = "Unlogged"
     }
 
 }
