@@ -57,8 +57,6 @@ global.Start = function(){
         
         //Creating windows from config 
         let win = new BrowserWindow({
-            width: config.width,
-            height: config.height,
             minWidth: 450,
             minHeight: 350,
             frame: false,
