@@ -17,8 +17,8 @@ global.config = {
     devTools : false,
     openAtLogin : false,
     jwt: ""
-}
-global.details={
+};
+global.details = {
     watchList : [],
     tasks : []
 }

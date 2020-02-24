@@ -164,6 +164,10 @@ a:active{
 .brand:active{
     color: var(--colorThree);
 }
+.brand_element{
+    color : inherit;
+    text-decoration:inherit;
+}
 
 
 .action:hover {

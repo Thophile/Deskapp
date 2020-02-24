@@ -3,63 +3,66 @@
  * Project : Deskapp
  */
 
- /** Tasks **/
+/** Tasks **/
 
 function loadTasks() {
-    var tbody = document.getElementById('tasks')
-    tbody.innerHTML = ''
-    for (let index = 0; index < details.tasks.length; index++) {
-        var tr = document.createElement('tr')
+    if (details !== undefined) {
 
-        var td = document.createElement('td')
-        td.className = 'truncate w-100 align-middle'
-        td.innerHTML = details.tasks[index].name
-        tr.appendChild(td)
-        var td = document.createElement('td')
-        td.className = 'btn-group'
+        var tbody = document.getElementById('tasks')
+        tbody.innerHTML = ''
+        for (let index = 0; index < details.tasks.length; index++) {
+            var tr = document.createElement('tr')
 
-        var button = document.createElement('button')
-        button.className = 'btn btn-dark colored'
-        button.innerHTML = '<i class="far fa-sticky-note"></i>'
-        button.addEventListener('click', () => {
-            addNote(index)
-        })
-        td.appendChild(button)
+            var td = document.createElement('td')
+            td.className = 'truncate w-100 align-middle'
+            td.innerHTML = details.tasks[index].name
+            tr.appendChild(td)
+            var td = document.createElement('td')
+            td.className = 'btn-group'
 
-        var button = document.createElement('button')
-        button.className = 'btn btn-dark colored'
-        button.innerHTML = '<i class="fas fa-edit"></i>'
-        button.addEventListener('click', () => {
-            editTask(index)
-        })
-        td.appendChild(button)
+            var button = document.createElement('button')
+            button.className = 'btn btn-dark colored'
+            button.innerHTML = '<i class="far fa-sticky-note"></i>'
+            button.addEventListener('click', () => {
+                addNote(index)
+            })
+            td.appendChild(button)
 
-        var button = document.createElement('button')
-        button.className = 'btn btn-dark colored'
-        button.innerHTML = '<i class="fas fa-sort-up"></i>'
-        button.addEventListener('click', () => {
-            sortUp(index)
-        })
-        td.appendChild(button)
+            var button = document.createElement('button')
+            button.className = 'btn btn-dark colored'
+            button.innerHTML = '<i class="fas fa-edit"></i>'
+            button.addEventListener('click', () => {
+                editTask(index)
+            })
+            td.appendChild(button)
 
-        var button = document.createElement('button')
-        button.className = 'btn btn-dark colored'
-        button.innerHTML = '<i class="fas fa-sort-down"></i>'
-        button.addEventListener('click', () => {
-            sortDown(index)
-        })
-        td.appendChild(button)
+            var button = document.createElement('button')
+            button.className = 'btn btn-dark colored'
+            button.innerHTML = '<i class="fas fa-sort-up"></i>'
+            button.addEventListener('click', () => {
+                sortUp(index)
+            })
+            td.appendChild(button)
 
-        var button = document.createElement('button')
-        button.className = 'btn btn-dark colored'
-        button.innerHTML = '<i class="fas fa-check-square"></i>'
-        button.addEventListener('click', () => {
-            removeTask(index)
-        })
-        td.appendChild(button)
+            var button = document.createElement('button')
+            button.className = 'btn btn-dark colored'
+            button.innerHTML = '<i class="fas fa-sort-down"></i>'
+            button.addEventListener('click', () => {
+                sortDown(index)
+            })
+            td.appendChild(button)
 
-        tr.appendChild(td)
-        tbody.appendChild(tr)
+            var button = document.createElement('button')
+            button.className = 'btn btn-dark colored'
+            button.innerHTML = '<i class="fas fa-check-square"></i>'
+            button.addEventListener('click', () => {
+                removeTask(index)
+            })
+            td.appendChild(button)
+
+            tr.appendChild(td)
+            tbody.appendChild(tr)
+        }
     }
     saveData()
 }

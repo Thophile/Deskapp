@@ -17,8 +17,7 @@ function displayWatchListButton() {
 
 //Display the watchlist
 function loadWatchList() {
-    if (details.watchList !== []) {
-
+    if (details !== undefined) {
         //Creating table
         var tbody = document.getElementById('tbody')
         tbody.innerHTML = ""
