@@ -250,8 +250,9 @@ function loadData(callback) {
         return data.json()
     })
     .then(res=>{
-        console.log(res)
         details = res.details;
+        config.email = res.data.email;
+        saveConfig()
     })
     .catch(error=>{console.log(error)})
 
@@ -297,12 +298,8 @@ function displayConfig(){
     //toggle settings
     document.getElementById('_devTools').checked = config.devTools
     document.getElementById('_openAtLogin').checked = config.openAtLogin
+    document.getElementById('_username').placeholder = (config.email == undefined ? "Unlogged" : config.email)
 
-    if(config.jwt !== "") {
-        document.getElementById('_username').placeholder = (config.email == undefined ? "Unlogged" : config.email)
-    }else{
-        document.getElementById('_username').placeholder = "Unlogged"
-    }
 
 }
 
