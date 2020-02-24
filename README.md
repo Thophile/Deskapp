@@ -21,12 +21,14 @@ Can I help improve DeskApp ?
 ------
 
 DeskApp is an Open-Source-Software (OSS) so you can edit the source code yourself to improve it.
-If your not a programmer yourself you can still help DeskApp improve by reporting issue you are facing with a detailled feedback.
+If your not a programmer yourself you can still help DeskApp to improve by reporting issue you are facing with a detailled feedback.
+
+Become a donor and help us with [Paypal donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=JD6AHXBX3QKHW&source=url)
 
 Installation : 
 ------
 
-Simply **download an run the msi installer** provided bellow. DeskApp will automaticly install or update.
+Simply **download an run the msi installer** provided under **the asset section**. DeskApp will automaticly install or update.
 **Create an account** with the dedicated pop-up and then **log in**. That's it DeskApp is ready for use. If you want you can swap account in the settings section.
 
 [Download installer](../../releases)
