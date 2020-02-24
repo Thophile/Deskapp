@@ -106,7 +106,7 @@ function loadWatchList() {
 
 //Remove and refresh the watchList
 function removeElement(index) {
-
+    if(details.watchList.length === 1) details.watchList = [];
     details.watchList.splice(index, 1)
     loadWatchList()
 }
