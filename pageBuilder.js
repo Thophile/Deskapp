@@ -22,9 +22,6 @@ var details = require('electron').remote.getGlobal("details")
 //On Start
 $(document).ready(function () {
 
-console.log(config)
-console.log(details)
-
     //Load json local config
     loadConfig(function () {
         //Load navbar
