@@ -13,13 +13,17 @@ require('popper.js');
 require('bootstrap');
 
 const api_url = "https://theophile.alexandresauner.fr/api_deskapp/";
-var config = remote.getGlobal("config")
-var details = remote.getGlobal("details")
 var navToggled = false;
 var logToggled = false;
+    
+var config = require('electron').remote.getGlobal("config")
+var details = require('electron').remote.getGlobal("details")
 
 //On Start
 $(document).ready(function () {
+
+console.log(config)
+console.log(details)
 
     //Load json local config
     loadConfig(function () {
@@ -33,29 +37,31 @@ $(document).ready(function () {
 
         //query the api for distant data
         loadData()
-        console.log(details)
     })
 });
 
 //Load a page in the main section
-function loadPage(filename) {
-    $("#main").load(filename);
-    log(filename + " loaded")
-    loadConfig()
-    saveData(loadData())
+function loadPage(str) {
+    $("#main").load(str);
+    log(str[0].toUpperCase() + "" + str.substring(1, str.length -5) + " loaded")
+    loadConfig();
+    try{
+        saveData(loadData());
+    }catch(e){
+        if (e.name !== "TypeError") throw e
+    }
+    
 
 }
 
 //Window Action Init
 function addAction() {
-    log("Activating buttons ...")
 
     document.getElementById('minimize').addEventListener('click', (e) => {
         e.preventDefault()
         var window = remote.getCurrentWindow();
         window.minimize();
     })
-    log("Minimize : OK")
 
     document.getElementById('maximize').addEventListener('click', (e) => {
         e.preventDefault()
@@ -66,7 +72,6 @@ function addAction() {
             window.unmaximize();
         }
     })
-    log("Maximize : OK")
 
     document.getElementById('close').addEventListener('click', (e) => {
         e.preventDefault()
@@ -75,8 +80,8 @@ function addAction() {
 
 
     })
-    log("Close : OK")
-    log("Application successfully started !")
+    let str = config.jwt ? "back" : " ";
+    log("Welcome" + str + "!" )
 }
 
 //Toogle the side navbar and log pop-up
@@ -93,7 +98,6 @@ function toggleNav() {
         document.getElementById("console").style.marginLeft = "200px";
         navToggled = true
     }
-    log("Navbar Toggled !")
 }
 function toggleLog(){
     if(logToggled){
@@ -184,18 +188,18 @@ function logIn(){
             return data.json()        
     })
     .then(res=>{
-        log(res.message)
+        console.log(res.message)
         config.jwt = res.jwt
         saveConfig()
         loadData()
     })
-    .catch(error=>{log(error)})
+    .catch(error=>{console.log(error)})
 
     
 }
 
 function saveData(callback) {
-    if(!details.watchList.length == 0 || !details.tasks.length == 0){
+    if(details !== undefined && (details.watchList.length !== 0 || details.tasks.length !== 0) ){
         
         credentials = JSON.stringify({
             details: details,
@@ -248,7 +252,6 @@ function loadData(callback) {
     .then(res=>{
         console.log(res)
         details = res.details;
-        email = res.data.email;
     })
     .catch(error=>{console.log(error)})
 
@@ -296,7 +299,7 @@ function displayConfig(){
     document.getElementById('_openAtLogin').checked = config.openAtLogin
 
     if(config.jwt !== "") {
-        document.getElementById('_username').placeholder = config.email
+        document.getElementById('_username').placeholder = (config.email == undefined ? "Unlogged" : config.email)
     }else{
         document.getElementById('_username').placeholder = "Unlogged"
     }
