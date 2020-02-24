@@ -80,7 +80,7 @@ function addAction() {
 
 
     })
-    let str = config.jwt ? "back" : " ";
+    let str = config.jwt ? " back" : " ";
     log("Welcome" + str + "!" )
 }
 
