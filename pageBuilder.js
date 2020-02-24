@@ -195,33 +195,33 @@ function logIn(){
 }
 
 function saveData(callback) {
-
-    credentials = JSON.stringify({
-        details: details,
-        jwt: config.jwt
-    })
-    //making the api query
-    var params = {
-        headers: {
-            "content-type":"application/json; charset=UTF-8"
-        },
-        body: credentials,
-        method: "POST" 
-    }
-
-    fetch(api_url + "update_user.php", params)
-    .then(data=>{ 
-        return data.json()  
-    })
-    .then(res=>{
-        config.jwt = res.jwt
-        saveConfig()
-        if (typeof callback === 'function' && callback()) callback();
+    if(!details.watchList.length == 0 || !details.tasks.length == 0){
         
-    })
-    .catch(error=>{console.log(error)})
-
+        credentials = JSON.stringify({
+            details: details,
+            jwt: config.jwt
+        })
+        //making the api query
+        var params = {
+            headers: {
+                "content-type":"application/json; charset=UTF-8"
+            },
+            body: credentials,
+            method: "POST" 
+        }
     
+        fetch(api_url + "update_user.php", params)
+        .then(data=>{ 
+            return data.json()  
+        })
+        .then(res=>{
+            config.jwt = res.jwt
+            saveConfig()
+            if (typeof callback === 'function' && callback()) callback();
+            
+        })
+        .catch(error=>{console.log(error)})
+    } 
 }
 
 function loadData(callback) {
