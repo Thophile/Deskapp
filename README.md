@@ -29,7 +29,7 @@ Installation :
 Simply **download an run the msi installer** provided bellow. DeskApp will automaticly install or update.
 **Create an account** with the dedicated pop-up and then **log in**. That's it DeskApp is ready for use. If you want you can swap account in the settings section.
 
-[Download installer](https://we.tl/t-XUjDGNQAkb)
+[Download installer](/releases)
 
 
 
