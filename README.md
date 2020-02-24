@@ -28,11 +28,7 @@ Become a donor and help us with [Paypal donation](https://www.paypal.com/cgi-bin
 Installation : 
 ------
 
-Simply **download an run the msi installer** provided under **the asset section**. DeskApp will automaticly install or update.
-**Create an account** with the dedicated pop-up and then **log in**. That's it DeskApp is ready for use. If you want you can swap account in the settings section.
+Simply **download an run the msi installer** provided under **the assets section**. DeskApp will automaticlly install or update if it is already installed.
+**Create an account** with the dedicated pop-up and then **log in**. That's it, DeskApp is ready for use. If you want you can swap account in the settings section.
 
 [Download installer](../../releases)
-
-
-
-
