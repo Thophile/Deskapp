@@ -15,7 +15,7 @@ How do we store your data ?
 
 DeskApp use your local AppData folder to store some of your preferences but data are mainly stored in a distant database.
 You will need to create an account to store and retrieve your data.
-Your transmissions are authenticated using JSON Web Token (JWT) and your passwords are securely stored using a strong one hasing algorithm. 
+Your transmissions are authenticated using JSON Web Token (JWT) and your passwords are securely stored using a strong hashing algorithm. 
 We also use the https protocol to communicate in order to secure the data you send to us.
 
 Can I help improve DeskApp ?
